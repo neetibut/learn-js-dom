@@ -11,15 +11,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body
-    class="bg-gray-100 font-inter flex items-center justify-center min-h-screen p-4"
+    class="bg-gray-100 font-inter flex flex-col items-center justify-center min-h-screen p-4"
   >
-    <main class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm">
+    <main class="bg-gray-400 rounded-2xl shadow-xl p-6 w-full max-w-sm">
       <div
         id="display"
         role="textbox"
         aria-label="Calculator display"
         aria-readonly="true"
-        class="bg-gray-800 text-white text-right p-4 rounded-t-lg text-4xl overflow-auto break-words min-h-[4rem]"
+        class="bg-gray-800 text-green-400 text-right p-4 rounded-t-lg text-4xl overflow-auto break-words min-h-[4rem]"
       >
         0
       </div>
@@ -163,6 +163,15 @@
         </button>
       </div>
     </main>
+    <footer
+      class="pt-3 hover:text-transparent bg-clip-text font-extrabold bg-gradient-to-r from-fuchsia-500 to-cyan-500"
+    >
+      <a
+        href="https://www.reddit.com/r/TikTokCringe/comments/1m37kmz/its_1999_and_you_are_getting_out_your_calculator/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
+        target="_blank"
+        >Like it's 1999...</a
+      >
+    </footer>
     <script src="display.js"></script>
   </body>
 </html>
