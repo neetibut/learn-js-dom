@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Wheel Spinner</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="font-sans bg-[#f0f2f5] flex justify-center items-center min-h-screen m-0 p-4"
+  >
+    <div
+      class="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center max-w-2xl w-full"
+    >
+      <h1 class="text-3xl font-bold text-gray-800 mb-6">Spin the Wheel!</h1>
+
+      <!-- Wheel Canvas Container -->
+      <div
+        class="relative flex justify-center items-center mb-6 w-[400px] h-[400px]"
+      >
+        <canvas
+          id="wheelCanvas"
+          width="400"
+          height="400"
+          class="rounded-full shadow-lg border-4 border-gray-200 bg-[#eeeeee] block mb-6"
+        ></canvas>
+        <div
+          class="w-0 h-0 absolute right-[-5%] -translate-x-1/2 border-l-[15px] border-l-transparent border-r-[15px] border-r-transparent border-b-[30px] border-b-red-600 z-10"
+        ></div>
+      </div>
+
+      <!-- Result Display -->
+      <div
+        id="resultDisplay"
+        class="hidden mt-6 p-4 bg-yellow-100 text-yellow-800 rounded-lg text-center text-2xl font-bold"
+      >
+        Winner: <span id="winnerText"></span>
+      </div>
+
+      <!-- Input for new entries -->
+      <div class="flex w-full max-w-md mb-4">
+        <input
+          id="newEntryInput"
+          type="text"
+          placeholder="Add an entry (e.g., 'Prize A')"
+          class="flex-grow p-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+        />
+        <button
+          id="addEntryButton"
+          class="bg-blue-600 text-white px-4 rounded-r-lg hover:bg-blue-700 transition-colors duration-200"
+        >
+          Add
+        </button>
+      </div>
+
+      <!-- Current Entries List -->
+      <div
+        class="w-full max-w-md bg-gray-50 p-4 rounded-xl border border-gray-200 mt-4 max-h-40 overflow-y-auto"
+      >
+        <h2 class="text-xl font-semibold text-gray-700 mb-3">
+          Current Entries
+        </h2>
+        <div id="entriesList">
+          <p id="noEntriesMessage" class="text-gray-500 text-center py-4">
+            No entries yet. Add some!
+          </p>
+        </div>
+      </div>
+
+      <!-- Spin Button -->
+      <button
+        id="spinButton"
+        disabled
+        class="mt-6 bg-green-600 text-white py-3 px-8 rounded-full text-xl font-semibold shadow-md transform transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:bg-green-700 hover:shadow-lg active:translate-y-0 active:shadow-sm"
+      >
+        Spin Wheel
+      </button>
+    </div>
+
+    <script>
+      // Get DOM elements
+      const wheelCanvas = document.getElementById("wheelCanvas");
+      const ctx = wheelCanvas.getContext("2d");
+      const newEntryInput = document.getElementById("newEntryInput");
+      const addEntryButton = document.getElementById("addEntryButton");
+      const entriesList = document.getElementById("entriesList");
+      const noEntriesMessage = document.getElementById("noEntriesMessage");
+      const spinButton = document.getElementById("spinButton");
+      const resultDisplay = document.getElementById("resultDisplay");
+      const winnerText = document.getElementById("winnerText");
+
+      // Wheel configuration
+      let entries = [];
+      const wheelColors = [
+        "#ef4444",
+        "#f97316",
+        "#eab308",
+        "#22c55e",
+        "#0ea5e9",
+        "#6366f1",
+        "#a855f7",
+        "#ec4899",
+        "#f43f5e",
+        "#fb923c",
+        "#facc15",
+        "#4ade80",
+        "#38bdf8",
+        "#818cf8",
+        "#c084fc",
+        "#f472b6",
+      ];
+      const centerX = wheelCanvas.width / 2;
+      const centerY = wheelCanvas.height / 2;
+      const radius = Math.min(centerX, centerY) - 10;
+      let currentRotation = 0;
+
+      function drawWheel() {
+        ctx.clearRect(0, 0, wheelCanvas.width, wheelCanvas.height);
+
+        if (entries.length === 0) {
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+          ctx.fillStyle = "#f3f4f6";
+          ctx.fill();
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = "#d1d5db";
+          ctx.stroke();
+          ctx.font = "20px Inter";
+          ctx.fillStyle = "#6b7280";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText("Add entries to spin!", centerX, centerY);
+          return;
+        }
+
+        const arcSize = (2 * Math.PI) / entries.length;
+
+        for (let i = 0; i < entries.length; i++) {
+          const startAngle = i * arcSize + currentRotation;
+          const endAngle = (i + 1) * arcSize + currentRotation;
+
+          ctx.beginPath();
+          ctx.moveTo(centerX, centerY);
+          ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+          ctx.closePath();
+          ctx.fillStyle = wheelColors[i % wheelColors.length];
+          ctx.fill();
+
+          ctx.save();
+          ctx.translate(centerX, centerY);
+          ctx.rotate(startAngle + arcSize / 2);
+          ctx.textAlign = "right";
+          ctx.fillStyle = "#ffffff";
+          ctx.font = "16px Inter";
+          ctx.fillText(entries[i], radius - 15, 0);
+          ctx.restore();
+        }
+      }
+
+      function updateEntriesList() {
+        entriesList.innerHTML = "";
+
+        if (entries.length === 0) {
+          entriesList.appendChild(noEntriesMessage);
+          spinButton.disabled = true;
+          resultDisplay.classList.add("hidden");
+        } else {
+          noEntriesMessage.remove();
+          spinButton.disabled = false;
+          entries.forEach((entry, index) => {
+            const entryItem = document.createElement("div");
+            entryItem.className =
+              "flex items-center justify-between py-2 border-b border-gray-200 last:border-b-0 text-gray-700";
+            entryItem.innerHTML = `
+            <span>${entry}</span>
+            <button data-index="${index}" class="bg-red-500 text-white text-xs px-2 py-1 rounded-md hover:bg-red-600 transition-colors duration-200">Remove</button>
+          `;
+            entriesList.appendChild(entryItem);
+          });
+        }
+
+        drawWheel();
+      }
+
+      function addEntry() {
+        const newEntry = newEntryInput.value.trim();
+        if (newEntry && entries.length < 15) {
+          entries.push(newEntry);
+          newEntryInput.value = "";
+          updateEntriesList();
+        } else if (entries.length >= 15) {
+          alert("You can add a maximum of 15 entries for better readability.");
+        }
+      }
+
+      function removeEntry(index) {
+        entries.splice(index, 1);
+        updateEntriesList();
+      }
+
+      function spinWheel() {
+        if (entries.length === 0) {
+          alert("Please add some entries to the wheel first!");
+          return;
+        }
+
+        spinButton.disabled = true;
+        resultDisplay.classList.add("hidden");
+
+        const totalSpins = 5;
+        const targetIndex = Math.floor(Math.random() * entries.length);
+        const arcSize = (2 * Math.PI) / entries.length;
+        const angleToTarget =
+          (2 * Math.PI - (targetIndex * arcSize + arcSize / 2)) % (2 * Math.PI);
+        const finalAngle = totalSpins * 2 * Math.PI + angleToTarget;
+        const duration = 5000;
+        let startTime = null;
+
+        function easeOutCubic(t) {
+          return --t * t * t + 1;
+        }
+
+        function animateSpin(currentTime) {
+          if (!startTime) startTime = currentTime;
+          const elapsedTime = currentTime - startTime;
+          const progress = Math.min(elapsedTime / duration, 1);
+          const easedProgress = easeOutCubic(progress);
+
+          currentRotation = (finalAngle * easedProgress) % (2 * Math.PI);
+          drawWheel();
+
+          if (progress < 1) {
+            requestAnimationFrame(animateSpin);
+          } else {
+            spinButton.disabled = false;
+            displayWinner(entries[targetIndex]);
+          }
+        }
+
+        requestAnimationFrame(animateSpin);
+      }
+
+      function displayWinner(winner) {
+        winnerText.textContent = winner;
+        resultDisplay.classList.remove("hidden");
+      }
+
+      addEntryButton.addEventListener("click", addEntry);
+      newEntryInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") addEntry();
+      });
+      entriesList.addEventListener("click", (e) => {
+        if (e.target.tagName === "BUTTON") {
+          removeEntry(parseInt(e.target.dataset.index));
+        }
+      });
+      spinButton.addEventListener("click", spinWheel);
+
+      // Initial render
+      updateEntriesList();
+    </script>
+  </body>
+</html>

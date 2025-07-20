@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Clock</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div
+      class="bg-gray-100 flex items-center justify-center min-h-screen p-4 box-border font-inter"
+    >
+      <div
+        class="bg-white p-8 rounded-2xl shadow-xl flex flex-col items-center w-full max-w-md"
+      >
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Digital Clock</h1>
+
+        <!-- Clock Display -->
+        <div
+          id="clockDisplay"
+          class="bg-gray-800 text-green-400 p-6 rounded-xl w-full flex justify-center items-center font-mono tracking-wider shadow-inner text-5xl"
+        >
+          <span id="hours" class="px-1">00</span>
+          <span class="animate-pulse px-1">:</span>
+          <span id="minutes" class="px-1">00</span>
+          <span class="animate-pulse px-1">:</span>
+          <span id="seconds" class="px-1">00</span>
+          <span id="ampm" class="px-1 ml-2 text-3xl">AM</span>
+        </div>
+
+        <!-- Date & Day -->
+        <div
+          id="dateDisplay"
+          class="mt-6 text-gray-700 text-xl sm:text-2xl font-semibold"
+        ></div>
+        <div
+          id="dayDisplay"
+          class="text-gray-500 text-base sm:text-xl mt-1"
+        ></div>
+      </div>
+
+      <script>
+        const hoursDisplay = document.getElementById("hours");
+        const minutesDisplay = document.getElementById("minutes");
+        const secondsDisplay = document.getElementById("seconds");
+        const ampmDisplay = document.getElementById("ampm");
+        const dateDisplay = document.getElementById("dateDisplay");
+        const dayDisplay = document.getElementById("dayDisplay");
+
+        function padZero(num) {
+          return num < 10 ? "0" + num : num;
+        }
+
+        function updateClock() {
+          const now = new Date();
+
+          let hours = now.getHours();
+          const mins = now.getMinutes();
+          const secs = now.getSeconds();
+          const day = now.toLocaleString("en-US", { weekday: "long" });
+          const month = now.toLocaleString("en-US", { month: "long" });
+          const date = now.getDate();
+          const year = now.getFullYear();
+
+          const ampm = hours >= 12 ? "PM" : "AM";
+          hours = hours % 12;
+          hours = hours ? hours : 12;
+
+          hoursDisplay.textContent = padZero(hours);
+          minutesDisplay.textContent = padZero(mins);
+          secondsDisplay.textContent = padZero(secs);
+          ampmDisplay.textContent = ampm;
+
+          dateDisplay.textContent = `${month} ${date}, ${year}`;
+          dayDisplay.textContent = day;
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+      </script>
+    </div>
+  </body>
+</html>

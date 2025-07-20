@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Accessible Calculator</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="bg-gray-100 font-inter flex items-center justify-center min-h-screen p-4"
+  >
+    <main class="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm">
+      <div
+        id="display"
+        role="textbox"
+        aria-label="Calculator display"
+        aria-readonly="true"
+        class="bg-gray-800 text-white text-right p-4 rounded-t-lg text-4xl overflow-auto break-words min-h-[4rem]"
+      >
+        0
+      </div>
+      <div class="grid grid-cols-4 gap-3 mt-4">
+        <button
+          type="button"
+          data-action="clear"
+          class="col-span-2 bg-red-500 text-white text-xl font-semibold py-3 rounded-xl shadow hover:bg-red-600 focus:outline-none focus:ring-2"
+        >
+          AC
+        </button>
+        <button
+          type="button"
+          data-action="delete"
+          aria-label="Delete"
+          class="bg-yellow-500 text-white text-xl font-semibold py-3 rounded-xl shadow hover:bg-yellow-600 focus:outline-none focus:ring-2"
+        >
+          DEL
+        </button>
+        <button
+          type="button"
+          data-action="operator"
+          data-value="/"
+          aria-label="Divide"
+          class="bg-blue-500 text-white text-xl font-semibold py-3 rounded-xl shadow hover:bg-blue-600 focus:outline-none focus:ring-2"
+        >
+          ÷
+        </button>
+        <button
+          type="button"
+          data-value="7"
+          class="bg-white text-gray-800 text-xl font-semibold py-3 rounded-xl shadow hover:bg-gray-100 focus:outline-none focus:ring-2"
+        >
+          7
+        </button>
+        <button
+          type="button"
+          data-value="8"
+          class="bg-white text-gray-800 text-xl font-semibold py-3 rounded-xl shadow hover:bg-gray-100 focus:outline-none focus:ring-2"
+        >
+          8
+        </button>
+        <button
+          type="button"
+          data-value="9"
+          class="bg-white text-gray-800 text-xl font-semibold py-3 rounded-xl shadow hover:bg-gray-100 focus:outline-none focus:ring-2"
+        >
+          9
+        </button>
+        <button
+          type="button"
+          data-action="operator"
+          data-value="*"
+          aria-label="Multiply"
+          class="bg-blue-500 text-white text-xl font-semibold py-3 rounded-xl shadow hover:bg-blue-600 focus:outline-none focus:ring-2"
+        >
+          ×
+        </button>
+        <button
+          type="button"
+          data-value="4"
+          class="bg-white text-gray-800 text-xl font-semibold py-3 rounded-xl shadow hover:bg-gray-100 focus:outline-none focus:ring-2"
+        >
+          4
+        </button>
+        <button
+          type="button"
+          data-value="5"
+          class="bg-white text-gray-800 text-xl font-semibold py-3 rounded-xl shadow hover:bg-gray-100 focus:outline-none focus:ring-2"
+        >
+          5
+        </button>
+        <button
+          type="button"
+          data-value="6"
+          class="bg-white text-gray-800 text-xl font-semibold py-3 rounded-xl shadow hover:bg-gray-100 focus:outline-none focus:ring-2"
+        >
+          6
+        </button>
+        <button
+          type="button"
+          data-action="operator"
+          data-value="-"
+          aria-label="Subtract"
+          class="bg-blue-500 text-white text-xl font-semibold py-3 rounded-xl shadow hover:bg-blue-600 focus:outline-none focus:ring-2"
+        >
+          −
+        </button>
+        <button
+          type="button"
+          data-value="1"
+          class="bg-white text-gray-800 text-xl font-semibold py-3 rounded-xl shadow hover:bg-gray-100 focus:outline-none focus:ring-2"
+        >
+          1
+        </button>
+        <button
+          type="button"
+          data-value="2"
+          class="bg-white text-gray-800 text-xl font-semibold py-3 rounded-xl shadow hover:bg-gray-100 focus:outline-none focus:ring-2"
+        >
+          2
+        </button>
+        <button
+          type="button"
+          data-value="3"
+          class="bg-white text-gray-800 text-xl font-semibold py-3 rounded-xl shadow hover:bg-gray-100 focus:outline-none focus:ring-2"
+        >
+          3
+        </button>
+        <button
+          type="button"
+          data-action="operator"
+          data-value="+"
+          aria-label="Add"
+          class="bg-blue-500 text-white text-xl font-semibold py-3 rounded-xl shadow hover:bg-blue-600 focus:outline-none focus:ring-2"
+        >
+          +
+        </button>
+        <button
+          type="button"
+          data-value="0"
+          class="col-span-2 bg-white text-gray-800 text-xl font-semibold py-3 rounded-xl shadow hover:bg-gray-100 focus:outline-none focus:ring-2"
+        >
+          0
+        </button>
+        <button
+          type="button"
+          data-value="."
+          aria-label="Decimal point"
+          class="bg-white text-gray-800 text-xl font-semibold py-3 rounded-xl shadow hover:bg-gray-100 focus:outline-none focus:ring-2"
+        >
+          .
+        </button>
+        <button
+          type="button"
+          data-action="equals"
+          aria-label="Equals"
+          class="bg-green-500 text-white text-xl font-semibold py-3 rounded-xl shadow hover:bg-green-600 focus:outline-none focus:ring-2"
+        >
+          =
+        </button>
+      </div>
+    </main>
+    <script src="display.js"></script>
+  </body>
+</html>
